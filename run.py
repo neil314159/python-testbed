@@ -13,7 +13,7 @@ def main(stdscr):
     
     stdscr.addstr("test")
     curses.init_pair(1, curses.COLOR_RED, curses.COLOR_WHITE)
-    stdscr.addstr(10,10, "RED ALERT555ß!", curses.color_pair(1))
+    stdscr.addstr(10,10, "RED ALERT555ß!")
     stdscr.refresh()
     stdscr.getkey()
 
