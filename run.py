@@ -2,6 +2,7 @@ import gspread
 import curses
 from google.oauth2.service_account import Credentials
 
+stdscr = curses.initscr()
 
 def main():
     print('Hello')
