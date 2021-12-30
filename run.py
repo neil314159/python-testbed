@@ -6,7 +6,7 @@ from google.oauth2.service_account import Credentials
 
 stdscr = curses.initscr()
 
-def main():
+def main(stdscr):
     stdscr.clear()
 
     # This raises ZeroDivisionError when i == 10.
