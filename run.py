@@ -402,4 +402,4 @@ def main(stdscr):
         stdscr.getch()
     return 0
 
-curses.wrapper(main)
+main()
