@@ -1,21 +1,25 @@
 import gspread
 import curses
 from curses import wrapper
+from curses.textpad import Textbox, rectangle
 
 from google.oauth2.service_account import Credentials
 
 stdscr = curses.initscr()
 
 def main(stdscr):
-    stdscr.clear()
+    stdscr.addstr(0, 0, "Enter IM message: (hit Ctrl-G to send)")
 
-    # This raises ZeroDivisionError when i == 10.
-    
-    #stdscr.addstr("test")
-    curses.init_pair(1, curses.COLOR_RED, curses.COLOR_WHITE)
-    stdscr.addstr(10,10, "RED ALERT555ß!")
+    editwin = curses.newwin(5,30, 2,1)
+    rectangle(stdscr, 1,0, 1+5+1, 1+30+1)
     stdscr.refresh()
-    stdscr.getkey()
 
+    box = Textbox(editwin)
+
+    # Let the user edit until Ctrl-G is struck.
+    box.edit()
+
+    # Get resulting contents
+    message = box.gather()
 print('Welcome to Love Sandiwches2 automation')
 wrapper(main)
