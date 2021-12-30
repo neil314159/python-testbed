@@ -5,7 +5,7 @@ screen = curses.initscr()
 try:
     screen.border(0)
 
-    box1 = curses.newwin(20, 20, 5, 5)
+    box1 = curses.newwin(10, 10, 5, 5)
     box1.box()    
 
     screen.refresh()
