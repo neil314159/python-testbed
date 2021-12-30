@@ -14,8 +14,8 @@ def main(stdscr):
     stdscr.addstr("test")
     curses.init_pair(1, curses.COLOR_RED, curses.COLOR_WHITE)
     stdscr.addstr(10,10, "RED ALERT555ß!", curses.color_pair(1))
-    #stdscr.refresh()
-    #stdscr.getkey()
+    stdscr.refresh()
+    stdscr.getkey()
 
-print('Welcome to Love Sandiwches automation')
+print('Welcome to Love Sandiwches2 automation')
 wrapper(main)
