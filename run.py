@@ -1,5 +1,7 @@
 import gspread
 import curses
+from curses import wrapper
+
 from google.oauth2.service_account import Credentials
 
 stdscr = curses.initscr()
@@ -16,4 +18,4 @@ def main():
     stdscr.getkey()
 
 print('Welcome to Love Sandiwches automation')
-main()
+wrapper(main)
