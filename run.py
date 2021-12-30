@@ -997,7 +997,7 @@ def print_big_number(stdscr, number, offsy, offsx):
         num_str = num_str[1:]
 
 def curses_init(stdscr):
-    curses.curs_set(0)
+    
     curses.init_pair(1, curses.COLOR_WHITE, curses.COLOR_BLACK)
     curses.init_pair(2, curses.COLOR_GREEN, curses.COLOR_BLACK)
     curses.init_pair(3, curses.COLOR_BLUE, curses.COLOR_BLACK)
