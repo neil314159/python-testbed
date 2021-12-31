@@ -1,5 +1,5 @@
 from __future__ import print_function
-import fixpath
+
 import colorama
 from colorama import Fore, Back, Style, Cursor
 from random import randint, choice
