@@ -1,79 +1,41 @@
-import curses
-from curses import wrapper
-import time
-import random
+from __future__ import print_function
+import fixpath
+import colorama
+from colorama import Fore, Back, Style, Cursor
+from random import randint, choice
+from string import printable
 
+# Demonstrate printing colored, random characters at random positions on the screen
 
-def start_screen(stdscr):
-	stdscr.clear()
-	stdscr.addstr("Welcome to the Speed Typing Test!")
-	stdscr.addstr("\nPress any key to begin!")
-	stdscr.refresh()
-	stdscr.getkey()
+# Fore, Back and Style are convenience classes for the constant ANSI strings that set
+#     the foreground, background and style. The don't have any magic of their own.
+FORES = [ Fore.BLACK, Fore.RED, Fore.GREEN, Fore.YELLOW, Fore.BLUE, Fore.MAGENTA, Fore.CYAN, Fore.WHITE ]
+BACKS = [ Back.BLACK, Back.RED, Back.GREEN, Back.YELLOW, Back.BLUE, Back.MAGENTA, Back.CYAN, Back.WHITE ]
+STYLES = [ Style.DIM, Style.NORMAL, Style.BRIGHT ]
 
-def display_text(stdscr, target, current, wpm=0):
-	stdscr.addstr(target)
-	stdscr.addstr(1, 0, f"WPM: {wpm}")
+# This assumes your terminal is 80x24. Ansi minimum coordinate is (1,1).
+MINY, MAXY = 1, 24
+MINX, MAXX = 1, 80
 
-	for i, char in enumerate(current):
-		correct_char = target[i]
-		color = curses.color_pair(1)
-		if char != correct_char:
-			color = curses.color_pair(2)
+# set of printable ASCII characters, including a space.
+CHARS = ' ' + printable.strip()
 
-		stdscr.addstr(0, i, char, color)
+PASSES = 1000
 
-def load_text():
-	with open("text.txt", "r") as f:
-		lines = f.readlines()
-		return random.choice(lines).strip()
+def main():
+    colorama.init()
+    pos = lambda y, x: Cursor.POS(x, y)
+    # draw a white border.
+    print(Back.WHITE, end='')
+    print('%s%s' % (pos(MINY, MINX), ' '*MAXX), end='')
+    for y in range(MINY, 1+MAXY):
+        print('%s %s ' % (pos(y, MINX), pos(y, MAXX)), end='')
+    print('%s%s' % (pos(MAXY, MINX), ' '*MAXX), end='')
+    # draw some blinky lights for a while.
+    for i in range(PASSES):
+        print('%s%s%s%s%s' % (pos(randint(1+MINY,MAXY-1), randint(1+MINX,MAXX-1)), choice(FORES), choice(BACKS), choice(STYLES), choice(CHARS)), end='')
+    # put cursor to top, left, and set color to white-on-black with normal brightness.
+    print('%s%s%s%s' % (pos(MINY, MINX), Fore.WHITE, Back.BLACK, Style.NORMAL), end='')
 
-def wpm_test(stdscr):
-	target_text = load_text()
-	current_text = []
-	wpm = 0
-	start_time = time.time()
-	stdscr.nodelay(True)
-
-	while True:
-		time_elapsed = max(time.time() - start_time, 1)
-		wpm = round((len(current_text) / (time_elapsed / 60)) / 5)
-
-		stdscr.clear()
-		display_text(stdscr, target_text, current_text, wpm)
-		stdscr.refresh()
-
-		if "".join(current_text) == target_text:
-			stdscr.nodelay(False)
-			break
-
-		try:
-			key = stdscr.getkey()
-		except:
-			continue
-
-		if ord(key) == 27:
-			break
-
-		if key in ("KEY_BACKSPACE", '\b', "\x7f"):
-			if len(current_text) > 0:
-				current_text.pop()
-		elif len(current_text) < len(target_text):
-			current_text.append(key)
-
-
-def main(stdscr):
-	curses.init_pair(1, curses.COLOR_GREEN, curses.COLOR_BLACK)
-	curses.init_pair(2, curses.COLOR_RED, curses.COLOR_BLACK)
-	curses.init_pair(3, curses.COLOR_WHITE, curses.COLOR_BLACK)
-
-	start_screen(stdscr)
-	while True:
-		wpm_test(stdscr)
-		stdscr.addstr(2, 0, "You completed the text! Press any key to continue...")
-		key = stdscr.getkey()
-		
-		if ord(key) == 27:
-			break
-
-wrapper(main)
+if __name__ == '__main__':
+    main()
